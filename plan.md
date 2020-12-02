@@ -1,0 +1,9 @@
+- Create HTML Structure -> TODO
+- Create header
+- Style Header
+- Create featured section
+- Create Netflix Originals
+- Create Movies List
+- Create Trending Now
+- Technology: HTML, JS, CSS
+- Icons: font awesome
