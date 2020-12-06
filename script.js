@@ -5,9 +5,9 @@ window.onload=()=>{
     getGenres();
 }
 
-fetchMovies=(url,element_selector,path_type)=>{
-fetch(url)
- .then((response) => {
+    fetchMovies=(url,element_selector,path_type)=>{
+        fetch(url)
+        .then((response) => {
         if(response.ok){
          return response.json();
         }else{
@@ -21,93 +21,10 @@ fetch(url)
         console.log(error_data);
     })
   }
-  //async await return a function as a promise
-  
-  async function getMovieTrailer(id){
-      var urls=`https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`
-    return await  fetch(urls)   
-    .then((response) => {
-        if(response.ok){
-         return response.json();
-        }else{
-            throw new Error("Something went wrong");
-        }
-     })
-    }
-
-    // async function getMovieTrailer(id){
-    
-    //   // Promise.all() lets us coalesce multiple promises into a single super-promise
-    //   return await Promise.all([
-    //     fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`)
-    //     .then((response) => {
-    //     if(response.ok){
-    //      return response.json();
-    //     }else{
-    //         throw new Error("Something went wrong");
-    //     }
-    //      }),// parse each response as json
-    //     fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`)
-    //    .then((response) => {
-    //     if(response.ok){
-    //      return response.json();
-    //     }else{
-    //         throw new Error("Something went wrong");
-    //     }
-    //      })
-    //   ]);
-      
-    
-     
-    // } 
-       
-     
-//////////////////////////////////////////////////////////////////////////////////////////////
-  const setTrailer = (trailers,results) =>{
-     const iframe=document.getElementById('movieTrailer');
-      const modalTitle=document.querySelector('.modal-title')
-     const movieNotFound=document.querySelector(".movieNotFound");
-    if(trailers.length > 0){
-         movieNotFound.classList.add('d-none'); //do not display the message
-        iframe.classList.remove('d-none');      //show iframe
-        iframe.src=`https://www.youtube.com/embed/${trailers[0].key}`
-        modalTitle.innerHTML=results[0].name;
-        
-       
-    }
-    else{
-        iframe.classList.add('d-none');     //display nothing in iframe
-        movieNotFound.classList.remove('d-none'); //showing the message
-    }
-  }
-  const handleMovieSelection =(e)=>{
-
-      const id=e.target.getAttribute('data-id');
-      const iframe=document.getElementById('movieTrailer');
-     
-      console.log(iframe);
-      getMovieTrailer(id).then((data)=>{
-        const results=data.results; //return array of results
-         //console.log(results);
-        const youTubeTrailers=results.filter((result)=>{
-          if(result.site=="YouTube" && result.type=="Trailer"){
-              return true;
-          } 
-          else{
-              return false;
-          }
-        })
-        setTrailer(youTubeTrailers,results);
-      });
-      $('#trailerModal').modal('show')
-            }
-    
-  
-    
 
   showMovies=(movies,element_selector,path_type)=>{
-   var moviesEl=document.querySelector(element_selector);
-      for(var movie of movies.results){
+        var moviesEl=document.querySelector(element_selector);
+            for(var movie of movies.results){
           var imageElement=document.createElement('img');
           imageElement.setAttribute('data-id',movie.id);
           imageElement.src=`https://image.tmdb.org/t/p/original${movie[path_type]}`;
@@ -134,6 +51,68 @@ getTopRatedMovies=()=>{
   
 }
 
+  //async await return a function as a promise
+  
+  async function getMovieTrailer(id){
+      var urls=`https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`
+    return await  fetch(urls)   
+    .then((response) => {
+        if(response.ok){
+         return response.json();
+        }else{
+            throw new Error("Something went wrong");
+        }
+     })
+    }
+
+         
+
+  const setTrailer = (trailers,results) =>{
+        const iframe=document.getElementById('movieTrailer');
+        const modalTitle=document.querySelector('.modal-title')
+         const movieNotFound=document.querySelector(".movieNotFound");
+         if(trailers.length > 0){
+         movieNotFound.classList.add('d-none'); //do not display the message
+        iframe.classList.remove('d-none');      //show iframe
+        iframe.src=`https://www.youtube.com/embed/${trailers[0].key}`
+        modalTitle.innerHTML=results[0].name;
+    
+       
+    }
+    else{
+        iframe.classList.add('d-none');     //display nothing in iframe
+        movieNotFound.classList.remove('d-none'); //showing the message
+    }
+  }
+  
+        const handleMovieSelection =(e)=>{
+            const id=e.target.getAttribute('data-id');
+            const iframe=document.getElementById('movieTrailer');
+                getMovieTrailer(id).then((data)=>{
+                const results=data.results; //return array of results
+                //console.log(results);
+                const youTubeTrailers=results.filter((result)=>{
+                if(result.site=="YouTube" && result.type=="Trailer"){
+                    return true;
+                } 
+                else{
+                    return false;
+                }
+                })
+                setTrailer(youTubeTrailers,results);
+            });
+            $('#trailerModal').modal('show')
+         
+            $(function(){
+            $('.close').click(function(){      
+                    $('iframe').attr('src', $('iframe').attr('src'));
+            });
+            });
+
+            }
+    
+    
+  
 
 
 //Loop through list of genres
@@ -143,7 +122,7 @@ getTopRatedMovies=()=>{
 
 //https://api.themoviedb.org/3/discover/movie?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=28
 //loop through each genre and called out all movies from fetchMovieBasedOnGenre. As we loop through each genre we pass the genreid and movies are fetched acc to genreid
-function showMoviesGenres(genres){
+ showMoviesGenres=(genres)=>{
 //loop through genres 
     genres.genres.forEach(function(genre){
         var movies = fetchMoviesBasedOnGenre(genre.id)
@@ -155,6 +134,7 @@ function showMoviesGenres(genres){
 
 })
 }
+//genre is passed and sorted
 showMovieBasedOnGenre=(genreName,movies)=>{
 let allMovies=document.querySelector('.movies');
 let genreEl=document.createElement('div');
@@ -178,7 +158,7 @@ genreEl.innerHTML=`<h2>${genreName}</h2>`
               allMovies.appendChild(moviesEl);
 }
 //another api call to fetch all movies by using promise 
- function fetchMoviesBasedOnGenre(genreId){
+     fetchMoviesBasedOnGenre=(genreId)=>{
     let url="https://api.themoviedb.org/3/discover/movie";
     url += "?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1"
     url+=`&with_genres=${genreId}`

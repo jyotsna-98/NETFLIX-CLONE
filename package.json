@@ -1,0 +1,21 @@
+{
+  "name": "netflix_clone",
+  "version": "1.0.0",
+  "description": "API FOR NETFLIX CLONE",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jyotsna-98"
+  },
+  "author": "JYOTSNA ARORA",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
